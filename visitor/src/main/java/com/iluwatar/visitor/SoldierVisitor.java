@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.visitor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * 
- * SoldierVisitor
- *
+ * SoldierVisitor.
  */
 public class SoldierVisitor implements UnitVisitor {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(SoldierVisitor.class);
+
   @Override
   public void visitSoldier(Soldier soldier) {
-    System.out.println("Greetings " + soldier);
+    LOGGER.info("Greetings {}", soldier);
   }
 
   @Override

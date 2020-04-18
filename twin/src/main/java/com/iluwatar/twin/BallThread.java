@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,17 @@
 
 package com.iluwatar.twin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is a UI thread for drawing the {@link BallItem}, and provide the method for suspend
  * and resume. It hold the reference of {@link BallItem} to delegate the draw task.
- * 
  */
 
 public class BallThread extends Thread {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(BallThread.class);
 
   private BallItem twin;
 
@@ -42,7 +46,7 @@ public class BallThread extends Thread {
   }
 
   /**
-   * Run the thread
+   * Run the thread.
    */
   public void run() {
 
@@ -61,12 +65,12 @@ public class BallThread extends Thread {
 
   public void suspendMe() {
     isSuspended = true;
-    System.out.println("Begin to suspend BallThread");
+    LOGGER.info("Begin to suspend BallThread");
   }
 
   public void resumeMe() {
     isSuspended = false;
-    System.out.println("Begin to resume BallThread");
+    LOGGER.info("Begin to resume BallThread");
   }
 
   public void stopMe() {

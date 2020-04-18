@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,20 +20,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.dependency.injection;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import com.iluwatar.dependency.injection.utils.InMemoryAppender;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * Date: 12/10/15 - 8:40 PM
  *
  * @author Jeroen Meulemeester
  */
-public class AdvancedWizardTest extends StdOutTest {
+public class AdvancedWizardTest {
+
+  private InMemoryAppender appender;
+
+  @BeforeEach
+  public void setUp() {
+    appender = new InMemoryAppender(Tobacco.class);
+  }
+
+  @AfterEach
+  public void tearDown() {
+    appender.stop();
+  }
 
   /**
    * Test if the {@link AdvancedWizard} smokes whatever instance of {@link Tobacco} is passed to him
@@ -42,20 +58,22 @@ public class AdvancedWizardTest extends StdOutTest {
   @Test
   public void testSmokeEveryThing() throws Exception {
 
-    final Tobacco[] tobaccos = {
-        new OldTobyTobacco(), new RivendellTobacco(), new SecondBreakfastTobacco()
-    };
+    List<Tobacco> tobaccos = List.of(
+        new OldTobyTobacco(),
+        new RivendellTobacco(),
+        new SecondBreakfastTobacco()
+    );
 
-    for (final Tobacco tobacco : tobaccos) {
+    // Verify if the wizard is smoking the correct tobacco ...
+    tobaccos.forEach(tobacco -> {
       final AdvancedWizard advancedWizard = new AdvancedWizard(tobacco);
       advancedWizard.smoke();
+      String lastMessage = appender.getLastMessage();
+      assertEquals("AdvancedWizard smoking " + tobacco.getClass().getSimpleName(), lastMessage);
+    });
 
-      // Verify if the wizard is smoking the correct tobacco ...
-      verify(getStdOutMock(), times(1)).println("AdvancedWizard smoking " + tobacco.getClass().getSimpleName());
-
-      // ... and nothing else is happening.
-      verifyNoMoreInteractions(getStdOutMock());
-    }
+    // ... and nothing else is happening.
+    assertEquals(tobaccos.size(), appender.getLogSize());
 
   }
 

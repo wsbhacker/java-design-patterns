@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,14 +20,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.privateclassdata;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * 
- * Immutable stew class, protected with Private Class Data pattern
- *
+ * Immutable stew class, protected with Private Class Data pattern.
  */
 public class ImmutableStew {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableStew.class);
 
   private StewData data;
 
@@ -36,11 +40,11 @@ public class ImmutableStew {
   }
 
   /**
-   * Mix the stew
+   * Mix the stew.
    */
   public void mix() {
-    System.out.println(String.format(
-        "Mixing the immutable stew we find: %d potatoes, %d carrots, %d meat and %d peppers",
-        data.getNumPotatoes(), data.getNumCarrots(), data.getNumMeat(), data.getNumPeppers()));
+    LOGGER
+        .info("Mixing the immutable stew we find: {} potatoes, {} carrots, {} meat and {} peppers",
+            data.getNumPotatoes(), data.getNumCarrots(), data.getNumMeat(), data.getNumPeppers());
   }
 }

@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.caching;
 
 import java.text.ParseException;
+import java.util.Optional;
 
 /**
- *
  * AppManager helps to bridge the gap in communication between the main class and the application's
  * back-end. DB connection is initialized through this class. The chosen caching strategy/policy is
  * also initialized here. Before the cache can be used, the size of the cache has to be set.
  * Depending on the chosen caching policy, AppManager will call the appropriate function in the
  * CacheStore class.
- *
  */
 public final class AppManager {
 
@@ -41,7 +41,6 @@ public final class AppManager {
   }
 
   /**
-   *
    * Developer/Tester is able to choose whether the application should use MongoDB as its underlying
    * data storage or a simple Java data structure to (temporarily) store the data/objects during
    * runtime.
@@ -59,17 +58,12 @@ public final class AppManager {
   }
 
   /**
-   * Initialize caching policy
+   * Initialize caching policy.
    */
   public static void initCachingPolicy(CachingPolicy policy) {
     cachingPolicy = policy;
     if (cachingPolicy == CachingPolicy.BEHIND) {
-      Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-        @Override
-        public void run() {
-          CacheStore.flushCache();
-        }
-      }));
+      Runtime.getRuntime().addShutdownHook(new Thread(CacheStore::flushCache));
     }
     CacheStore.clearCache();
   }
@@ -79,19 +73,21 @@ public final class AppManager {
   }
 
   /**
-   * Find user account
+   * Find user account.
    */
   public static UserAccount find(String userId) {
     if (cachingPolicy == CachingPolicy.THROUGH || cachingPolicy == CachingPolicy.AROUND) {
       return CacheStore.readThrough(userId);
     } else if (cachingPolicy == CachingPolicy.BEHIND) {
       return CacheStore.readThroughWithWriteBackPolicy(userId);
+    } else if (cachingPolicy == CachingPolicy.ASIDE) {
+      return findAside(userId);
     }
     return null;
   }
 
   /**
-   * Save user account
+   * Save user account.
    */
   public static void save(UserAccount userAccount) {
     if (cachingPolicy == CachingPolicy.THROUGH) {
@@ -100,10 +96,33 @@ public final class AppManager {
       CacheStore.writeAround(userAccount);
     } else if (cachingPolicy == CachingPolicy.BEHIND) {
       CacheStore.writeBehind(userAccount);
+    } else if (cachingPolicy == CachingPolicy.ASIDE) {
+      saveAside(userAccount);
     }
   }
 
   public static String printCacheContent() {
     return CacheStore.print();
+  }
+
+  /**
+   * Cache-Aside save user account helper.
+   */
+  private static void saveAside(UserAccount userAccount) {
+    DbManager.updateDb(userAccount);
+    CacheStore.invalidate(userAccount.getUserId());
+  }
+
+  /**
+   * Cache-Aside find user account helper.
+   */
+  private static UserAccount findAside(String userId) {
+    return Optional.ofNullable(CacheStore.get(userId))
+        .or(() -> {
+          Optional<UserAccount> userAccount = Optional.ofNullable(DbManager.readFromDb(userId));
+          userAccount.ifPresent(account -> CacheStore.set(userId, account));
+          return userAccount;
+        })
+        .orElse(null);
   }
 }

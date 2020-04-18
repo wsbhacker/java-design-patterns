@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,17 +20,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.callback;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import org.slf4j.Logger;
+
 /**
- * 
- * Implementation of task that need to be executed
- * 
+ * Implementation of task that need to be executed.
  */
-public class SimpleTask extends Task {
+public final class SimpleTask extends Task {
+
+  private static final Logger LOGGER = getLogger(SimpleTask.class);
 
   @Override
   public void execute() {
-    System.out.println("Perform some important activity and after call the callback method.");
+    LOGGER.info("Perform some important activity and after call the"
+        + " callback method.");
   }
 }

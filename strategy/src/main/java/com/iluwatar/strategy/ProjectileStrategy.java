@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.strategy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * 
  * Projectile strategy.
- *
  */
 public class ProjectileStrategy implements DragonSlayingStrategy {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProjectileStrategy.class);
+
   @Override
   public void execute() {
-    System.out
-        .println("You shoot the dragon with the magical crossbow and it falls dead on the ground!");
+    LOGGER.info("You shoot the dragon with the magical crossbow and it falls dead on the ground!");
   }
 }

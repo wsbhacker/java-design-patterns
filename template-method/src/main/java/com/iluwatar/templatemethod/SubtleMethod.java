@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,14 +20,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.templatemethod;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * 
  * SubtleMethod implementation of {@link StealingMethod}.
- *
  */
 public class SubtleMethod extends StealingMethod {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SubtleMethod.class);
 
   @Override
   protected String pickTarget() {
@@ -36,11 +40,11 @@ public class SubtleMethod extends StealingMethod {
 
   @Override
   protected void confuseTarget(String target) {
-    System.out.println("Approach the " + target + " with tears running and hug him!");
+    LOGGER.info("Approach the {} with tears running and hug him!", target);
   }
 
   @Override
   protected void stealTheItem(String target) {
-    System.out.println("While in close contact grab the " + target + "'s wallet.");
+    LOGGER.info("While in close contact grab the {}'s wallet.", target);
   }
 }

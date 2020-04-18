@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,23 @@
  * THE SOFTWARE.
  */
 
-
 package com.iluwatar.twin;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * GameItem is a common class which provides some common methods for game object.
  */
 public abstract class GameItem {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(GameItem.class);
+
   /**
-   * Template method, do some common logic before draw
+   * Template method, do some common logic before draw.
    */
   public void draw() {
-    System.out.println("draw");
+    LOGGER.info("draw");
     doDraw();
   }
 

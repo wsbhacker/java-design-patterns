@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.servicelocator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a single service implementation of a sample service. This is the actual service that will
@@ -31,11 +35,13 @@ package com.iluwatar.servicelocator;
  */
 public class ServiceImpl implements Service {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServiceImpl.class);
+
   private final String serviceName;
   private final int id;
 
   /**
-   * Constructor
+   * Constructor.
    */
   public ServiceImpl(String serviceName) {
     // set the service name
@@ -57,6 +63,6 @@ public class ServiceImpl implements Service {
 
   @Override
   public void execute() {
-    System.out.println("Service " + getName() + " is now executing with id " + getId());
+    LOGGER.info("Service {} is now executing with id {}", getName(), getId());
   }
 }

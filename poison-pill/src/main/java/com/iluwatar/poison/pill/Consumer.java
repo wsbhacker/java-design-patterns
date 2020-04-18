@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,14 +20,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.poison.pill;
 
 import com.iluwatar.poison.pill.Message.Headers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Class responsible for receiving and handling submitted to the queue messages
+ * Class responsible for receiving and handling submitted to the queue messages.
  */
 public class Consumer {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
 
   private final MqSubscribePoint queue;
   private final String name;
@@ -38,27 +43,24 @@ public class Consumer {
   }
 
   /**
-   * Consume message
+   * Consume message.
    */
   public void consume() {
     while (true) {
-      Message msg;
       try {
-        msg = queue.take();
+        var msg = queue.take();
         if (Message.POISON_PILL.equals(msg)) {
-          System.out.println(String.format("Consumer %s receive request to terminate.", name));
+          LOGGER.info("Consumer {} receive request to terminate.", name);
           break;
         }
+        var sender = msg.getHeader(Headers.SENDER);
+        var body = msg.getBody();
+        LOGGER.info("Message [{}] from [{}] received by [{}]", body, sender, name);
       } catch (InterruptedException e) {
         // allow thread to exit
-        System.err.println(e);
+        LOGGER.error("Exception caught.", e);
         return;
       }
-
-      String sender = msg.getHeader(Headers.SENDER);
-      String body = msg.getBody();
-      System.out.println(String.format("Message [%s] from [%s] received by [%s]", body, sender,
-          name));
     }
   }
 }

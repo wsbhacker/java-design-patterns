@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,31 +20,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.observer.generic;
 
 import com.iluwatar.observer.WeatherType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * 
- * GOrcs
- *
+ * GOrcs.
  */
 public class GOrcs implements Race {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(GOrcs.class);
 
   @Override
   public void update(GWeather weather, WeatherType weatherType) {
     switch (weatherType) {
       case COLD:
-        System.out.println("The orcs are freezing cold.");
+        LOGGER.info("The orcs are freezing cold.");
         break;
       case RAINY:
-        System.out.println("The orcs are dripping wet.");
+        LOGGER.info("The orcs are dripping wet.");
         break;
       case SUNNY:
-        System.out.println("The sun hurts the orcs' eyes.");
+        LOGGER.info("The sun hurts the orcs' eyes.");
         break;
       case WINDY:
-        System.out.println("The orc smell almost vanishes in the wind.");
+        LOGGER.info("The orc smell almost vanishes in the wind.");
         break;
       default:
         break;

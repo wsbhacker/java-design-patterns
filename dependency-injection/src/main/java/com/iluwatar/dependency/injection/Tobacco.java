@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,17 +20,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.dependency.injection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * 
- * Tobacco abstraction
- *
+ * Tobacco abstraction.
  */
 public abstract class Tobacco {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(Tobacco.class);
+
   public void smoke(Wizard wizard) {
-    System.out.println(String.format("%s smoking %s", wizard.getClass().getSimpleName(), this
-        .getClass().getSimpleName()));
+    LOGGER.info("{} smoking {}", wizard.getClass().getSimpleName(),
+        this.getClass().getSimpleName());
   }
 }

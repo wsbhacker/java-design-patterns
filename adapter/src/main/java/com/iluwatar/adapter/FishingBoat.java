@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,21 +20,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.adapter;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
+import org.slf4j.Logger;
+
 /**
- *
- * Device class (adaptee in the pattern). We want to reuse this class
- *
+ * Device class (adaptee in the pattern). We want to reuse this class. Fishing boat moves by
+ * sailing.
  */
-public class FishingBoat {
+final class FishingBoat {
 
-  public void sail() {
-    System.out.println("The Boat is moving to that place");
-  }
+  private static final Logger LOGGER = getLogger(FishingBoat.class);
 
-  public void fish() {
-    System.out.println("fishing ...");
+  void sail() {
+    LOGGER.info("The fishing boat is sailing");
   }
 
 }

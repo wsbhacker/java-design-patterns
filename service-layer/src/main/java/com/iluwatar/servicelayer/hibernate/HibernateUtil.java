@@ -1,6 +1,6 @@
-/**
+/*
  * The MIT License
- * Copyright (c) 2014 Ilkka Seppälä
+ * Copyright © 2014-2019 Ilkka Seppälä
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,22 +20,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.iluwatar.servicelayer.hibernate;
 
 import com.iluwatar.servicelayer.spell.Spell;
 import com.iluwatar.servicelayer.spellbook.Spellbook;
 import com.iluwatar.servicelayer.wizard.Wizard;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Produces the Hibernate {@link SessionFactory}.
  */
 public final class HibernateUtil {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(HibernateUtil.class);
+
   /**
-   * The cached session factory
+   * The cached session factory.
    */
   private static volatile SessionFactory sessionFactory;
 
@@ -50,16 +54,17 @@ public final class HibernateUtil {
   public static synchronized SessionFactory getSessionFactory() {
     if (sessionFactory == null) {
       try {
-        sessionFactory =
-            new Configuration().addAnnotatedClass(Wizard.class).addAnnotatedClass(Spellbook.class)
-                .addAnnotatedClass(Spell.class)
-                .setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect")
-                .setProperty("hibernate.connection.url", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1")
-                .setProperty("hibernate.current_session_context_class", "thread")
-                .setProperty("hibernate.show_sql", "true")
-                .setProperty("hibernate.hbm2ddl.auto", "create-drop").buildSessionFactory();
+        sessionFactory = new Configuration()
+            .addAnnotatedClass(Wizard.class)
+            .addAnnotatedClass(Spellbook.class)
+            .addAnnotatedClass(Spell.class)
+            .setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect")
+            .setProperty("hibernate.connection.url", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1")
+            .setProperty("hibernate.current_session_context_class", "thread")
+            .setProperty("hibernate.show_sql", "false")
+            .setProperty("hibernate.hbm2ddl.auto", "create-drop").buildSessionFactory();
       } catch (Throwable ex) {
-        System.err.println("Initial SessionFactory creation failed." + ex);
+        LOGGER.error("Initial SessionFactory creation failed.", ex);
         throw new ExceptionInInitializerError(ex);
       }
     }
